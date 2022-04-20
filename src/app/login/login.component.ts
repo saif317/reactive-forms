@@ -12,9 +12,12 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
+  username: string = '';
+  password: string = '';
+
   login(): void {
-    console.log(this.loginForm.get('username')?.value);
-    console.log(this.loginForm.get('password')?.value);
+    this.username = this.loginForm.get('username')?.value;
+    this.password = this.loginForm.get('password')?.value;
   }
 
   constructor() {}

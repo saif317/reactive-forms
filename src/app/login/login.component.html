@@ -17,3 +17,8 @@
   </div>
   <button type="submit">Login</button>
 </form>
+
+<div *ngIf="username && password">
+  <span> {{ username }} </span>
+  <span> {{ password }} </span>
+</div>
