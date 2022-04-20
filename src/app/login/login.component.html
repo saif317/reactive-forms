@@ -15,10 +15,20 @@
       formControlName="password"
     />
   </div>
-  <button type="submit">Login</button>
-</form>
+  <div *ngIf="username!.errors?.['required']||password!.errors?.['required']">
+    Fill all the fields
+  </div>
 
-<div *ngIf="username && password">
-  <span> {{ username }} </span>
-  <span> {{ password }} </span>
-</div>
+  <div *ngIf="password!.errors?.['pattern']">
+    password must be atleast 8 characters long,and consist of letters and
+    numbers
+  </div>
+
+  <div *ngIf="username!.errors?.['maxlength']">
+    the username must not be longer than 30 charcters
+  </div>
+
+  <div *ngIf="!username!.invalid && !password!.invalid">
+    <button type="submit">Login</button>
+  </div>
+</form>

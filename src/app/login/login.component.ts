@@ -1,5 +1,6 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -8,19 +9,52 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
+    username: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-z0-9_-]{8,15}$'),
+    ]),
   });
 
-  username: string = '';
-  password: string = '';
+  httpOptions: object = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+  };
 
   login(): void {
-    this.username = this.loginForm.get('username')?.value;
-    this.password = this.loginForm.get('password')?.value;
+    const body: object = {
+      username: this.loginForm.get('username')?.value,
+      password: this.loginForm.get('password')?.value,
+    };
+    this.http
+      .post(
+        'https://jsonplaceholder.typicode.com/posts',
+        body,
+        this.httpOptions
+      )
+      .subscribe({
+        next: (data) => {
+          console.log('data', data);
+        },
+        error: (error) => {
+          console.error('Error', error);
+        },
+      });
   }
 
-  constructor() {}
+  get username() {
+    return this.loginForm.get('username');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {}
 }
